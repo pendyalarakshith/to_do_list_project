@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'tasks/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="New task">
+            <input type="number" name="priority" placeholder="Priority">
+            <button type="submit">Add</button>
+        </form>
+        <ul>
+            {% for task in tasks %}
+                <li>
+                    {{ task.title }} (Priority: {{ task.priority }})
+                    <form action="{% url 'delete_task' task.id %}" method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                    <a href="{% url 'edit_task' task.id %}">Edit</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'export_tasks' %}">Export Tasks</a> |
+        <a href="{% url 'import_tasks' %}">Import Tasks
+    </div>
+</body>
+</html>
